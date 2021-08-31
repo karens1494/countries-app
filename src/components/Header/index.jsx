@@ -6,6 +6,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     maxHeight: "25vw",
     width: "100%",
+    marginBottom: 20,
   },
   offset: theme.mixins.toolbar,
   selectTheme: {
@@ -22,12 +23,12 @@ const Header = ({ darkState, handleThemeChange }) => {
   const classes = useStyles();
   return (
     <>
-      <AppBar position="absolute" color="secondary" className={classes.root}>
+      <AppBar position="static" color="secondary" className={classes.root}>
         <Grid container direction="row">
           <Grid item xs={8}>
             <Container>
-              <Typography variant="h3"  className={classes.title}>
-                <Link href="/" color='textPrimary' underline="none">
+              <Typography variant="h3" className={classes.title}>
+                <Link href="/" color="textPrimary" underline="none">
                   Where in the World?
                 </Link>
               </Typography>
@@ -42,7 +43,6 @@ const Header = ({ darkState, handleThemeChange }) => {
           </Grid>
         </Grid>
       </AppBar>
-      <div className={classes.offset} style={{ marginTop: 10, marginBottom: 10 }} />
     </>
   );
 };

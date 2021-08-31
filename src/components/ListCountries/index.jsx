@@ -1,7 +1,8 @@
 import { Container, Grid, makeStyles } from "@material-ui/core";
+
 import CardCountry from "../CardCountry";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
   },

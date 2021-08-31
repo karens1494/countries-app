@@ -1,15 +1,16 @@
 import { CircularProgress, makeStyles } from "@material-ui/core";
 import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import ListCountries from "../../components/ListCountries";
 import NavSearch from "../../components/NavSearch";
-import { getAllCountries } from "../../hooks/api";
+import { getAllCountries, getCountriesByRegion } from "../../hooks/api";
 
 const useStyles = makeStyles(() => ({
   container: {
     width: "100%",
   },
   root: {
-    marginTop: 50,
+    marginTop: 20,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -23,6 +24,19 @@ const Home = () => {
   const [region, setRegion] = useState("none");
   const [filtercountries, setFiltercountries] = useState([]);
   const classes = useStyles();
+  const [loadedCountries, setLoadedCountries] = useState([]);
+  const [lastObjectPosition, setLastObjectPosition] = useState(12);
+  const perPage = 8;
+
+  const loadCountries = () => {
+    setTimeout(() => {
+      const load = filtercountries.slice(lastObjectPosition, lastObjectPosition + perPage);
+      setLoadedCountries((currentCountries) => {
+        return [...currentCountries, ...load];
+      });
+      setLastObjectPosition((currentValue) => currentValue + perPage);
+    }, 1500);
+  };
 
   useEffect(() => {
     const getDataCountries = async () => {
@@ -31,6 +45,7 @@ const Home = () => {
         const response = await getAllCountries();
         setCountries(response);
         setFiltercountries(response);
+        setLoadedCountries(response.slice(0, perPage));
       } catch (error) {
         console.log(error.message);
       }
@@ -39,49 +54,64 @@ const Home = () => {
     getDataCountries();
   }, []);
 
-  const handleChange = (e) => {
-    let filters = [];
+  const handleChange = async (e) => {
     const { value } = e.target;
-    setSearch(value);
-    if (value === "") {
-      filters = countries;
-    } else {
-      if (region === "none") {
-        filters = countries.filter((country) => country.name.toLowerCase().includes(value.toLowerCase()));
-      } else {
-        filters = countries.filter(
-          (country) => country.name.toLowerCase().includes(value.toLowerCase()) && country.region === region
-        );
-      }
-    }
-    setFiltercountries(filters);
+    await setSearch(value);
   };
 
-  const handleChangeRegion = (e) => {
-    let filters = [];
+  useEffect(() => {
+    const checkingSearch = async () => {
+      let data = [];
+      if (region !== "none") {
+        if (region === "All") {
+          data = countries;
+        } else {
+          data = await getCountriesByRegion(region);
+        }
+      } else {
+        data = countries;
+      }
+      if (search !== "") {
+        data = data.filter((country) => country.name.toLowerCase().includes(search.toLowerCase()));
+      }
+      setLastObjectPosition(12);
+      setFiltercountries(data);
+      setLoadedCountries(data.slice(0, perPage));
+    };
+    checkingSearch();
+  }, [search, region, countries]);
+
+  const handleChangeRegion = async (e) => {
     const { value } = e.target;
-    setRegion(value);
-    if (value === "none") {
-      filters = countries;
-    } else {
-      filters = countries.filter((country) => country.region.includes(value));
-    }
-    setFiltercountries(filters);
+    await setRegion(value);
   };
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} id="container">
       <NavSearch handleChange={handleChange} search={search} region={region} handleChangeRegion={handleChangeRegion} />
-
-      {loading ? (
-        <div className={classes.root}>
-          <CircularProgress size={100} color="inherit" />
-        </div>
-      ) : (
-        <div className={classes.root}>
-          <ListCountries countries={filtercountries} />
-        </div>
-      )}
+      <InfiniteScroll
+        dataLength={loadedCountries.length}
+        next={() => loadCountries()}
+        pageStart={0}
+        hasMore={lastObjectPosition < filtercountries.length}
+        endMessage={""}
+        loader={
+          <div className={classes.root}>
+            <CircularProgress key={Math.random() * 1000} size={100} color="inherit" />
+          </div>
+        }
+        style={{ overflowY: "hidden" }}
+      >
+        {loading ? (
+          <div className={classes.root}>
+            <CircularProgress key={Math.random() * 1000} size={100} color="inherit" />
+          </div>
+        ) : (
+          <div className={classes.root}>
+            <ListCountries key={Math.random() * 1000} countries={loadedCountries} />
+          </div>
+        )}
+      </InfiniteScroll>
     </div>
   );
 };

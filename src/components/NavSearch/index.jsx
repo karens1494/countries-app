@@ -60,6 +60,7 @@ const NavSearch = ({ handleChange, search, region, handleChangeRegion }) => {
                   <MenuItem value="none" disabled>
                     Filter by Region
                   </MenuItem>
+                  <MenuItem value="All">All</MenuItem>
                   <MenuItem value="Africa">Africa</MenuItem>
                   <MenuItem value="Americas">America</MenuItem>
                   <MenuItem value="Asia">Asia</MenuItem>

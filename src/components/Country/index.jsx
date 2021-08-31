@@ -31,8 +31,9 @@ const useStyles = makeStyles((theme) => ({
       height: 400,
     },
     [theme.breakpoints.down("xs")]: {
-      height: 250,
+      height: 200,
     },
+    objectFit: "cover",
   },
 
   titleBorders: {

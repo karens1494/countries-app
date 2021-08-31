@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
     margin: 0,
-    minHeight: "85vh",
+    minHeight: "80vh",
   },
 }));
 

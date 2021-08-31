@@ -9,13 +9,19 @@ const useStyles = makeStyles(() => ({
   backButton: {
     width: 150,
     marginTop: 5,
-    padding: '6px 6px'
+    padding: "6px 6px",
   },
   icon: {
     margin: 2,
   },
   text: {
     margin: 2,
+  },
+  details: {
+    marginTop: 20,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
 

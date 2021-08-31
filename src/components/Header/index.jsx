@@ -28,7 +28,7 @@ const Header = ({ darkState, handleThemeChange }) => {
           <Grid item xs={8}>
             <Container>
               <Typography variant="h3" className={classes.title}>
-                <Link href="/" color="textPrimary" underline="none">
+                <Link href="#" color="textPrimary" underline="none">
                   Where in the World?
                 </Link>
               </Typography>

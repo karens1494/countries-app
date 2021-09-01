@@ -1,8 +1,9 @@
-import { Button, CircularProgress, Container, makeStyles, Typography } from "@material-ui/core";
+import { Button, Container, makeStyles, Typography } from "@material-ui/core";
 import { ArrowBack } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import Country from "../../components/Country";
+import DataLoading from "../../components/DataLoading";
 import { getDataCountry } from "../../hooks/api";
 
 const useStyles = makeStyles(() => ({
@@ -26,11 +27,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DetailsCountry = () => {
-  const [country, setCountry] = useState({});
-  const [loading, setLoading] = useState(true);
-  const { idCountry } = useParams();
   const classes = useStyles();
   const history = useHistory();
+  const { idCountry } = useParams();
+  const [country, setCountry] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -56,13 +57,7 @@ const DetailsCountry = () => {
           </Typography>
         </Button>
       </Container>
-      {loading ? (
-        <div className={classes.details}>
-          <CircularProgress size={100} color="inherit" />
-        </div>
-      ) : (
-        <Country country={country} />
-      )}
+      {loading ? <DataLoading /> : <Country country={country} />}
     </Container>
   );
 };

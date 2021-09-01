@@ -4,6 +4,10 @@ const cliente = axios.create({
   baseURL: "https://restcountries.eu/rest/v2",
 });
 
+/**
+ * Función que obtiene un arreglo con la información de los países del mundo
+ * @returns
+ */
 const getAllCountries = async () => {
   let dataCountries = [];
 
@@ -21,6 +25,11 @@ const getAllCountries = async () => {
   return dataCountries;
 };
 
+/**
+ * Función que obtiene la información de un país específico
+ * @param {String} code
+ * @returns
+ */
 const getDataCountry = async (code) => {
   let dataCountry = {};
   try {
@@ -38,11 +47,17 @@ const getDataCountry = async (code) => {
     dataCountry.borders = borders;
   } catch (error) {
     console.log(error.message);
+    dataCountry = {};
   }
 
   return dataCountry;
 };
 
+/**
+ * Función que obtiene la información básica de una lista de países
+ * @param {String} codes
+ * @returns
+ */
 const getDataCountries = async (codes) => {
   let dataCountries = [];
   try {
@@ -56,6 +71,11 @@ const getDataCountries = async (codes) => {
   return dataCountries;
 };
 
+/**
+ * Función que obtiene la información de los países según una región específica
+ * @param {String} region
+ * @returns
+ */
 const getCountriesByRegion = async (region) => {
   let dataCountries = [];
   try {

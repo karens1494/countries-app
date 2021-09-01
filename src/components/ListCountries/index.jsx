@@ -21,7 +21,7 @@ const ListCountries = ({ countries }) => {
   const classes = useStyles();
 
   return (
-    <Container>
+    <Container style={{ marginTop: 20 }}>
       <Grid container className={classes.root} spacing={3}>
         {countries.length > 0 ? (
           countries.map((country) => (

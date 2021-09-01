@@ -1,5 +1,6 @@
 import { Container, Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import InfoData from "../InfoData";
 
 const useStyles = makeStyles((theme) => ({
   info: {
@@ -16,14 +17,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 0,
     marginBottom: 30,
   },
-  point: {
-    marginBottom: 5,
-  },
-
   item: {
     marginBottom: 30,
   },
-
   img: {
     margin: 0,
     width: "100%",
@@ -35,11 +31,9 @@ const useStyles = makeStyles((theme) => ({
     },
     objectFit: "cover",
   },
-
   titleBorders: {
     marginBottom: 10,
   },
-
   borderButton: {
     textTransform: "none",
     fontSize: 11,
@@ -68,49 +62,18 @@ const Country = ({ country }) => {
             <Typography className={classes.title} variant="h3">
               {country.name}
             </Typography>
-
             <Grid container>
               <Grid item xs={12} sm={6} className={classes.item}>
-                <Typography className={classes.point} variant="subtitle2">
-                  {"Native Name: "}
-                  <Typography variant="caption">{country.nativeName}</Typography>
-                </Typography>
-
-                <Typography className={classes.point} variant="subtitle2">
-                  {"Population: "}
-                  <Typography variant="caption">{country.population}</Typography>
-                </Typography>
-
-                <Typography className={classes.point} variant="subtitle2">
-                  {"Region: "}
-                  <Typography variant="caption">{country.region}</Typography>
-                </Typography>
-
-                <Typography className={classes.point} variant="subtitle2">
-                  {"Sub Region: "}
-                  <Typography variant="caption">{country.subregion}</Typography>
-                </Typography>
-
-                <Typography className={classes.point} variant="subtitle2">
-                  {"Capital: "}
-                  <Typography variant="caption">{country.capital}</Typography>
-                </Typography>
+                <InfoData label="Native Name" value={country.nativeName} />
+                <InfoData label="Population" value={country.population} />
+                <InfoData label="Region" value={country.region} />
+                <InfoData label="Sub Region" value={country.subregion} />
+                <InfoData label="Capital" value={country.capital} />
               </Grid>
               <Grid item xs={12} sm={6} className={classes.item}>
-                <Typography className={classes.point} variant="subtitle2">
-                  {"Top Level Domain: "}
-                  <Typography variant="caption">{country.topLevelDomain}</Typography>
-                </Typography>
-
-                <Typography className={classes.point} variant="subtitle2">
-                  {"Currencies: "}
-                  <Typography variant="caption">{country.currencies}</Typography>
-                </Typography>
-
-                <Typography className={classes.point} variant="subtitle2">
-                  {"Languages: "}
-                  <Typography variant="caption">{country.languages}</Typography>
-                </Typography>
+                <InfoData label="Top Level Domain" value={country.topLevelDomain} />
+                <InfoData label="Currencies" value={country.currencies} />
+                <InfoData label="Languages" value={country.languages} />
               </Grid>
             </Grid>
             <Grid container alignItems="center">

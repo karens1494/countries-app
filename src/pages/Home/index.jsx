@@ -1,42 +1,20 @@
-import { CircularProgress, makeStyles } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import DataLoading from "../../components/DataLoading";
 import ListCountries from "../../components/ListCountries";
 import NavSearch from "../../components/NavSearch";
 import { getAllCountries, getCountriesByRegion } from "../../hooks/api";
 
-const useStyles = makeStyles(() => ({
-  container: {
-    width: "100%",
-  },
-  root: {
-    marginTop: 20,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-}));
 
 const Home = () => {
-  const [countries, setCountries] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const perPage = 8;
   const [search, setSearch] = useState("");
   const [region, setRegion] = useState("none");
+  const [loading, setLoading] = useState(true);
+  const [countries, setCountries] = useState([]);
   const [filtercountries, setFiltercountries] = useState([]);
-  const classes = useStyles();
   const [loadedCountries, setLoadedCountries] = useState([]);
   const [lastObjectPosition, setLastObjectPosition] = useState(12);
-  const perPage = 8;
-
-  const loadCountries = () => {
-    setTimeout(() => {
-      const load = filtercountries.slice(lastObjectPosition, lastObjectPosition + perPage);
-      setLoadedCountries((currentCountries) => {
-        return [...currentCountries, ...load];
-      });
-      setLastObjectPosition((currentValue) => currentValue + perPage);
-    }, 1500);
-  };
 
   useEffect(() => {
     const getDataCountries = async () => {
@@ -54,20 +32,11 @@ const Home = () => {
     getDataCountries();
   }, []);
 
-  const handleChange = async (e) => {
-    const { value } = e.target;
-    await setSearch(value);
-  };
-
   useEffect(() => {
     const checkingSearch = async () => {
       let data = [];
-      if (region !== "none") {
-        if (region === "All") {
-          data = countries;
-        } else {
-          data = await getCountriesByRegion(region);
-        }
+      if (region !== "none" && region !== "all") {
+        data = await getCountriesByRegion(region);
       } else {
         data = countries;
       }
@@ -81,13 +50,28 @@ const Home = () => {
     checkingSearch();
   }, [search, region, countries]);
 
-  const handleChangeRegion = async (e) => {
+  const loadCountries = () => {
+    setTimeout(() => {
+      const load = filtercountries.slice(lastObjectPosition, lastObjectPosition + perPage);
+      setLoadedCountries((currentCountries) => {
+        return [...currentCountries, ...load];
+      });
+      setLastObjectPosition((currentValue) => currentValue + perPage);
+    }, 1500);
+  };
+
+  const handleChange = (e) => {
     const { value } = e.target;
-    await setRegion(value);
+    setSearch(value);
+  };
+
+  const handleChangeRegion = (e) => {
+    const { value } = e.target;
+    setRegion(value);
   };
 
   return (
-    <div className={classes.container} id="container">
+    <div style={{ width: "100%" }}>
       <NavSearch handleChange={handleChange} search={search} region={region} handleChangeRegion={handleChangeRegion} />
       <InfiniteScroll
         dataLength={loadedCountries.length}
@@ -95,22 +79,10 @@ const Home = () => {
         pageStart={0}
         hasMore={lastObjectPosition < filtercountries.length}
         endMessage={""}
-        loader={
-          <div className={classes.root}>
-            <CircularProgress key={Math.random() * 1000} size={100} color="inherit" />
-          </div>
-        }
+        loader={<DataLoading />}
         style={{ overflowY: "hidden" }}
       >
-        {loading ? (
-          <div className={classes.root}>
-            <CircularProgress key={Math.random() * 1000} size={100} color="inherit" />
-          </div>
-        ) : (
-          <div className={classes.root}>
-            <ListCountries key={Math.random() * 1000} countries={loadedCountries} />
-          </div>
-        )}
+        {loading ? <DataLoading /> : <ListCountries key={Math.random() * 1000} countries={loadedCountries} />}
       </InfiniteScroll>
     </div>
   );

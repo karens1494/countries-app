@@ -1,5 +1,6 @@
 import { Card, CardActionArea, CardContent, CardMedia, makeStyles, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import InfoData from "../InfoData";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,9 +13,6 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 200,
     width: "auto",
-  },
-  point: {
-    marginBottom: 5,
   },
   title: {
     marginBottom: 10,
@@ -37,18 +35,9 @@ const CardCountry = ({ dataCountry }) => {
           <Typography variant="h6" className={classes.title}>
             {dataCountry.name}
           </Typography>
-          <Typography className={classes.point} variant="subtitle2">
-            {"Population: "}
-            <Typography variant="caption">{dataCountry.population}</Typography>
-          </Typography>
-          <Typography className={classes.point} variant="subtitle2">
-            {"Region: "}
-            <Typography variant="caption">{dataCountry.region}</Typography>
-          </Typography>
-          <Typography className={classes.point} variant="subtitle2">
-            {"Capital: "}
-            <Typography variant="caption">{dataCountry.capital}</Typography>
-          </Typography>
+          <InfoData label="Population" value={dataCountry.population} />
+          <InfoData label="Region" value={dataCountry.region} />
+          <InfoData label="Capital" value={dataCountry.capital} />
         </CardContent>
       </Card>
     </CardActionArea>

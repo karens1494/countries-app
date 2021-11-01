@@ -42,7 +42,7 @@ const Home = () => {
   useEffect(() => {
     const checkingSearch = async () => {
       let data = [];
-      if (region !== "none" && region !== "all") {
+      if (region !== "none" && region !== "All") {
         const response = await getCountriesByRegion(region);
         if (response.success === true) {
           data = response.data;

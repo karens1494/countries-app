@@ -1,6 +1,7 @@
-import { AppBar, Box, Button, Container, Grid, Link, makeStyles, Typography } from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import { Brightness2, BrightnessHigh } from "@material-ui/icons";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,21 +17,25 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: "140%",
     margin: 15,
+    cursor: 'pointer'
   },
 }));
 
 const Header = ({ darkState, handleThemeChange }) => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const goHome = () => {
+    history.push("/");
+  };
   return (
     <>
       <AppBar position="static" color="secondary" className={classes.root}>
         <Grid container direction="row">
           <Grid item xs={8}>
             <Container>
-              <Typography variant="h3" className={classes.title}>
-                <Link href="#" color="textPrimary" underline="none">
-                  Where in the World?
-                </Link>
+              <Typography variant="h3" className={classes.title} onClick={goHome}>
+                Where in the World?
               </Typography>
             </Container>
           </Grid>

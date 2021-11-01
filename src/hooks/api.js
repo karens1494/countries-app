@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const cliente = axios.create({
-  baseURL: "https://restcountries.eu/rest/v2",
+  baseURL: "https://restcountries.com/v3.1",
 });
 
 /**
@@ -9,14 +9,19 @@ const cliente = axios.create({
  * @returns
  */
 const getAllCountries = async () => {
-  let dataCountries = [];
+  let dataCountries = { data: [], success: false };
 
   try {
-    const response = await cliente.get("/all?fields=name;capital;region;population;flag;alpha3Code");
-    dataCountries = response.data.map((country) => ({
-      code: country.alpha3Code,
-      ...country,
+    const response = await cliente.get("/all");
+    dataCountries.data = response.data.map((country) => ({
+      name: country.name.official,
+      code: country.cca3,
+      capital: country.capital,
+      region: country.region,
+      population: country.population,
+      flag: country.flags.svg,
     }));
+    dataCountries.success = true;
   } catch (error) {
     console.log(error.message);
     dataCountries = [];
@@ -31,25 +36,24 @@ const getAllCountries = async () => {
  * @returns
  */
 const getDataCountry = async (code) => {
-  let dataCountry = {};
+  let dataCountry = { data: {}, success: true };
   try {
     const response = await cliente.get(`/alpha/${code}`);
-    dataCountry = response.data;
+    dataCountry.data = response.data[0];
     let borders = [];
-    const currencies = response.data.currencies.map((currency) => currency.name);
-    const languages = response.data.languages.map((language) => language.name);
-    if (dataCountry.borders.length > 0) {
-      const dataBorders = dataCountry.borders.join(";");
+    const currencies = Object.values(response.data[0].currencies).map((currency) => currency.name);
+    const languages = Object.values(response.data[0].languages);
+    if (dataCountry.data.borders.length > 0) {
+      const dataBorders = dataCountry.data.borders.join(",");
       borders = await getDataCountries(dataBorders);
     }
-    dataCountry.currencies = currencies.toString();
-    dataCountry.languages = languages.toString();
-    dataCountry.borders = borders;
+    dataCountry.data.currencies = currencies.toString();
+    dataCountry.data.languages = languages.toString();
+    dataCountry.data.borders = borders;
   } catch (error) {
     console.log(error.message);
-    dataCountry = {};
+    dataCountry = { data: {}, success: false };
   }
-
   return dataCountry;
 };
 
@@ -62,7 +66,7 @@ const getDataCountries = async (codes) => {
   let dataCountries = [];
   try {
     const response = await cliente.get(`/alpha?codes=${codes}`);
-    dataCountries = response.data.map((country) => ({ name: country.name, code: country.alpha3Code }));
+    dataCountries = response.data.map((country) => ({ name: country.name.official, code: country.cca3 }));
   } catch (error) {
     console.log(error.message);
     dataCountries = [];
@@ -77,17 +81,18 @@ const getDataCountries = async (codes) => {
  * @returns
  */
 const getCountriesByRegion = async (region) => {
-  let dataCountries = [];
+  let dataCountries = { data: [], success: false };
   try {
     const response = await cliente.get(`/region/${region}`);
-    dataCountries = response.data.map((country) => ({
-      name: country.name,
-      code: country.alpha3Code,
+    dataCountries.data = response.data.map((country) => ({
+      name: country.name.official,
+      code: country.cca3,
       population: country.population,
       region: country.region,
       capital: country.region,
-      flag: country.flag,
+      flag: country.flags.svg,
     }));
+    dataCountries.success = true;
   } catch (error) {
     console.log(error.message);
     dataCountries = [];

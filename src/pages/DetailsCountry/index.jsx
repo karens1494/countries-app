@@ -37,10 +37,15 @@ const DetailsCountry = () => {
     const getData = async () => {
       setLoading(true);
       let response = await getDataCountry(idCountry);
-      setCountry(response);
-      setLoading(false);
+      if (response.success === true) {
+        setCountry(response.data);
+        setLoading(false);
+      } else {
+        history.push("/error");
+      }
     };
     getData();
+    // eslint-disable-next-line 
   }, [idCountry]);
 
   const getBack = () => {

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useHistory } from "react-router";
 import DataLoading from "../../components/DataLoading";
 import ListCountries from "../../components/ListCountries";
 import NavSearch from "../../components/NavSearch";
 import { getAllCountries, getCountriesByRegion } from "../../hooks/api";
 
-
 const Home = () => {
   const perPage = 8;
+  const history = useHistory();
   const [search, setSearch] = useState("");
   const [region, setRegion] = useState("none");
   const [loading, setLoading] = useState(true);
@@ -21,22 +22,33 @@ const Home = () => {
       setLoading(true);
       try {
         const response = await getAllCountries();
-        setCountries(response);
-        setFiltercountries(response);
-        setLoadedCountries(response.slice(0, perPage));
+        if (response.success === true) {
+          setCountries(response.data);
+          setFiltercountries(response.data);
+          setLoadedCountries(response.data.slice(0, perPage));
+        } else {
+          history.push("/error");
+        }
       } catch (error) {
         console.log(error.message);
       }
       setLoading(false);
     };
+
     getDataCountries();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     const checkingSearch = async () => {
       let data = [];
       if (region !== "none" && region !== "all") {
-        data = await getCountriesByRegion(region);
+        const response = await getCountriesByRegion(region);
+        if (response.success === true) {
+          data = response.data;
+        } else {
+          history.push("/error");
+        }
       } else {
         data = countries;
       }
@@ -47,7 +59,9 @@ const Home = () => {
       setFiltercountries(data);
       setLoadedCountries(data.slice(0, perPage));
     };
+
     checkingSearch();
+    // eslint-disable-next-line
   }, [search, region, countries]);
 
   const loadCountries = () => {

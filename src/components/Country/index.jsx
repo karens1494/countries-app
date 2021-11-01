@@ -46,7 +46,7 @@ const Country = ({ country }) => {
   const classes = useStyles();
 
   const handleClickBorder = (code) => {
-    history.push(`/${code}`);
+    history.push(`/details/${code}`);
   };
 
   return (
@@ -54,24 +54,24 @@ const Country = ({ country }) => {
       <Grid container spacing={4} justifyContent="center">
         <Grid item xs={12} md={6}>
           <Container>
-            <img className={classes.img} alt="flag" src={country.flag} />
+            <img className={classes.img} alt="flag" src={country.flags.svg} />
           </Container>
         </Grid>
         <Grid item xs={12} md={6} className={classes.info}>
           <Container>
             <Typography className={classes.title} variant="h3">
-              {country.name}
+              {country.name.official}
             </Typography>
             <Grid container>
               <Grid item xs={12} sm={6} className={classes.item}>
-                <InfoData label="Native Name" value={country.nativeName} />
+                <InfoData label="Common Name" value={country.name.common} />
                 <InfoData label="Population" value={country.population} />
                 <InfoData label="Region" value={country.region} />
                 <InfoData label="Sub Region" value={country.subregion} />
                 <InfoData label="Capital" value={country.capital} />
               </Grid>
               <Grid item xs={12} sm={6} className={classes.item}>
-                <InfoData label="Top Level Domain" value={country.topLevelDomain} />
+                <InfoData label="Top Level Domain" value={country.tld[0]} />
                 <InfoData label="Currencies" value={country.currencies} />
                 <InfoData label="Languages" value={country.languages} />
               </Grid>
@@ -83,7 +83,7 @@ const Country = ({ country }) => {
                 </Typography>
               </Grid>
               <Grid container spacing={1} item xs={12} sm={9} md={9} lg={9}>
-                {country.borders.length > 1
+                {country.borders.length > 0
                   ? country.borders.map((border) => (
                       <Grid item key={border.code}>
                         <Button

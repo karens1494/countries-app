@@ -5,7 +5,7 @@ import InfoData from "../InfoData";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.secondary.main,
-    height: 400,
+    height: 380,
   },
   content: {
     margin: 10,
@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginBottom: 10,
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
   },
 }));
 
@@ -24,7 +27,7 @@ const CardCountry = ({ dataCountry }) => {
   const history = useHistory();
 
   const showDetailsCountry = () => {
-    history.push(`/${dataCountry.code}`);
+    history.push(`/details/${dataCountry.code}`);
   };
 
   return (

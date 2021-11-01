@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import DetailsCountry from "./pages/DetailsCountry";
+import NotFound404 from "./components/NotFound404";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -60,12 +61,13 @@ function App() {
         <Header darkState={darkState} handleThemeChange={handleThemeChange} />
         <div className={classes.root}>
           <Switch>
-            <Route exact path="/:idCountry">
+            <Route exact path="/details/:idCountry">
               <DetailsCountry />
             </Route>
             <Route exact path="/">
               <Home />
             </Route>
+            <Route component={NotFound404} />
           </Switch>
         </div>
       </ThemeProvider>

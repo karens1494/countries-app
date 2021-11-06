@@ -83,7 +83,7 @@ const Country = ({ country }) => {
                 </Typography>
               </Grid>
               <Grid container spacing={1} item xs={12} sm={9} md={9} lg={9}>
-                {country.borders.length > 0
+                {country?.borders?.length > 0
                   ? country.borders.map((border) => (
                       <Grid item key={border.code}>
                         <Button
@@ -97,7 +97,7 @@ const Country = ({ country }) => {
                         </Button>
                       </Grid>
                     ))
-                  : null}
+                  : <Typography variant="caption" className={classes.titleBorders}>None</Typography>}
               </Grid>
             </Grid>
           </Container>

@@ -41,9 +41,9 @@ const getDataCountry = async (code) => {
     const response = await cliente.get(`/alpha/${code}`);
     dataCountry.data = response.data[0];
     let borders = [];
-    const currencies = Object.values(response.data[0].currencies).map((currency) => currency.name);
-    const languages = Object.values(response.data[0].languages);
-    if (dataCountry.data.borders.length > 0) {
+    const currencies = Object.values(response.data[0]?.currencies).map((currency) => currency.name);
+    const languages = Object.values(response.data[0]?.languages);
+    if (dataCountry.data?.borders?.length > 0) {
       const dataBorders = dataCountry.data.borders.join(",");
       borders = await getDataCountries(dataBorders);
     }
